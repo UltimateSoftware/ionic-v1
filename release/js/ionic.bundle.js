@@ -734,7 +734,7 @@ window.ionic.version = '1.3.2';
     // whatever lookup was done to find this element failed to find it
     // so we can't listen for events on it.
     if(element === null) {
-      void 0;
+      console.error('Null element passed to gesture (element does not exist). Not listening for gesture');
       return this;
     }
 
@@ -2460,7 +2460,9 @@ window.ionic.version = '1.3.2';
   function verifyPlatformReady() {
     setTimeout(function() {
       if(!self.isReady && self.isWebView()) {
-        void 0;
+        console.warn('Possible issue: deviceready did not fire in a reasonable amount of time. ' +
+        'This can be caused by plugins in an inconsistent state. One possible solution: uninstall/remove all ' +
+        'plugins and reinstall them. Additionally, one or more plugins might be faulty or out of date.');
       }
     }, platformReadyTimer);
   }
@@ -2984,7 +2986,7 @@ function tapMouseDown(e) {
     e.stopPropagation();
 
     if (!ionic.Platform.isEdge() && (!ionic.tap.isTextInput(e.target) || tapLastTouchTarget !== e.target) &&
-      !isSelectOrOption(e.target.tagName) && !ionic.tap.isVideo(e.target)) {
+      !isSelectOrOption(e.target.tagName) && !e.target.isContentEditable && !ionic.tap.isVideo(e.target)) {
       // If you preventDefault on a text input then you cannot move its text caret/cursor.
       // Allow through only the text input default. However, without preventDefault on an
       // input the 300ms delay can change focus on inputs after the keyboard shows up.
@@ -6991,7 +6993,7 @@ ionic.scroll = {
 (function(ionic) {
   var NOOP = function() {};
   var deprecated = function(name) {
-    void 0;
+    console.error('Method not available in native scrolling: ' + name);
   };
   ionic.views.ScrollNative = ionic.views.View.inherit({
 
@@ -54085,7 +54087,7 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
           var viewIds = Object.keys(viewHistory.views);
           viewIds.forEach(function(viewId) {
             var view = viewHistory.views[viewId];
-            if ( view.backViewId === switchToView.viewId ) {
+            if ((view.backViewId === switchToView.viewId) && (view.historyId !== switchToView.historyId)) {
               view.backViewId = null;
             }
           });
@@ -54721,7 +54723,7 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
  * $ionicConfigProvider.views.maxCache(10);
  * ```
  *
- * Additionally, each platform can have it's own config within the `$ionicConfigProvider.platform`
+ * Additionally, each platform can have its own config within the `$ionicConfigProvider.platform`
  * property. The config below would only apply to Android devices.
  *
  * ```js
@@ -63791,7 +63793,7 @@ function headerFooterBarDirective(isHeader) {
  * reach to trigger the on-infinite expression. Default: 1%.
  * @param {string=} spinner The {@link ionic.directive:ionSpinner} to show while loading. The SVG
  * {@link ionic.directive:ionSpinner} is now the default, replacing rotating font icons.
- * @param {string=} icon The icon to show while loading. Default: 'ion-load-d'.  This is depreicated
+ * @param {string=} icon The icon to show while loading. Default: 'ion-load-d'.  This is depreciated
  * in favor of the SVG {@link ionic.directive:ionSpinner}.
  * @param {boolean=} immediate-check Whether to check the infinite scroll bounds immediately on load.
  *
@@ -66479,7 +66481,6 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
  * @ngdoc directive
  * @name ionSlides
  * @module ionic
- * @delegate ionic.service:$ionicSlideBoxDelegate
  * @restrict E
  * @description
  * The Slides component is a powerful multi-page container where each page can be swiped or dragged between.
